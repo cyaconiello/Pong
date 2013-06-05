@@ -21,7 +21,7 @@ $(document).ready(function(){
     scoreB: 0   // score for player B
   };
   
-  
+  if(pingpong.score.scoreB != 10 || pingpong.score.scoreA != 10){
   $(function(){
     // set interval to call gameloop every 30 milliseconds
     pingpong.timer = setInterval(gameloop,30);
@@ -38,7 +38,7 @@ $(document).ready(function(){
     movePaddles();
     moveBall();
   }
-
+  
   function movePaddles() {
     var playgroundHeight = parseInt($("#playground").height());
     // use our custom timer to continuously check if a key is pressed.
@@ -73,6 +73,7 @@ $(document).ready(function(){
   }
   
   function moveBall() {
+    
     // reference useful variables
     var playgroundHeight = parseInt($("#playground").height());
     var playgroundWidth = parseInt($("#playground").width());
@@ -89,34 +90,52 @@ $(document).ready(function(){
       ball.directionY = 1;
     }
     // check right edge
-    if (ball.x +ball.speed*ball.directionX > playgroundWidth)
-    {
-      // player B lost.
-      pingpong.score.scoreA++;
-      $("#scoreA").html(pingpong.score.scoreA);
-      // reset the ball;
-      ball.x = 250;
-      ball.y = 100;
-      $("#ball").css({
-        "left": ball.x,
-        "top" : ball.y
-      });
-      ball.directionX = -1;
-    }
-    // check left edge
-    if (ball.x  + ball.speed*ball.directionX < 0)
-    {
-      // player A lost.
-      pingpong.score.scoreB++;
-      $("#scoreB").html(pingpong.score.scoreB);
-      // reset the ball;
+    if(pingpong.score.scoreA < 10){
+      if (ball.x +ball.speed*ball.directionX > playgroundWidth)
+      {
+        // player B lost.
+        pingpong.score.scoreA++;
+        $("#scoreA").html(pingpong.score.scoreA);
+        // reset the ball;
+        ball.x = 250;
+        ball.y = 100;
+        $("#ball").css({
+          "left": ball.x,
+          "top" : ball.y
+        });
+        ball.directionX = -1;
+      }
+    }else{
       ball.x = 150;
       ball.y = 100;
       $("#ball").css({
         "left": ball.x,
         "top" : ball.y
       });
-      ball.directionX = 1;
+    }
+    // check left edge
+    if(pingpong.score.scoreB < 10){
+      if (ball.x  + ball.speed*ball.directionX < 0)
+      {
+        // player A lost.
+        pingpong.score.scoreB++;
+        $("#scoreB").html(pingpong.score.scoreB);
+        // reset the ball;
+        ball.x = 150;
+        ball.y = 100;
+        $("#ball").css({
+          "left": ball.x,
+          "top" : ball.y
+        });
+        ball.directionX = 1;
+      }
+    }else{
+      ball.x = 150;
+      ball.y = 100;
+      $("#ball").css({
+        "left": ball.x,
+        "top" : ball.y
+      });
     }
 
     ball.x += ball.speed * ball.directionX;
@@ -137,7 +156,6 @@ $(document).ready(function(){
     var paddleBX = parseInt($("#paddleB").css("left"));
     var paddleBYBottom = parseInt($("#paddleB").css("top"))+parseInt($("#paddleB").css("height"));
     var paddleBYTop = parseInt($("#paddleB").css("top"));
-    console.log(paddleBX);
     if (ball.x + ball.speed*ball.directionX >= paddleBX)
     {
       if (ball.y + ball.speed*ball.directionY <= paddleBYBottom && ball.y + ball.speed*ball.directionY >= paddleBYTop)
@@ -152,7 +170,7 @@ $(document).ready(function(){
     });
     
   }
-           
+  }   
            
   //console.logs any keydown pressed
   $(document).keydown(function(e){
